@@ -1,9 +1,8 @@
 module Spree
   module Admin
     class VideosController < ResourceController
-      before_filter :load_data
-      create.before :set_product
-      update.before :set_product
+      before_action :load_data
+      before_action :set_product, only: [:create, :update]
 
       def update_positions
         params[:positions].each do |id, index|

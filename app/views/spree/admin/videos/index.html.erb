@@ -1,41 +1,36 @@
-<%= render :partial => 'spree/admin/shared/product_tabs', :locals => {:current => "Videos"} %>
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :videos } %>
 
-<table class="index sortable">
-  <tr>
-    <th><%= t("youtube_ref") %></th>
-  </tr>
-
-  <% @product.videos.each do |video| %>
-    <tr id="<%= dom_id(video) %>">
-      <td>
-        <span class="handle"></span>
-        	<%= h video.youtube_ref %>
-      </td>
-      <td class="actions">
-        <%= link_to_with_icon('edit', t("edit"), edit_admin_product_video_url(@product, video), :class => 'edit') %>
-        &nbsp;
-        <%= link_to_delete video, {:url => admin_product_video_url(@product, video) }%>
-      </td>
-    </tr>
-  <% end %>
-</table>
-
-<div id="video"></div>
-<br/>
-<p>
-    <%= link_to icon('add') + ' ' + t("new_video"), new_admin_product_video_url(@product), :id => "new_video_link" %>
-</p>
-
-<% content_for :head do %>
-  <script type="text/javascript">
-    jQuery(document).ready(function(){
-
-      jQuery('#new_video_link').click(function (event) {
-        event.preventDefault();
-        jQuery(this).hide();
-        jQuery.ajax({type: 'GET', url: this.href, data: ({authenticity_token: AUTH_TOKEN}), success: function(r){ jQuery('#video').html(r);} });
-      });
-
-    });
-  </script>
+<% content_for :page_actions do %>
+  <%= button_link_to(Spree.t(:new_video), spree.new_admin_product_video_url(@product), { class: "btn-success", icon: 'add', id: 'new_video_link' }) if can? :create, Spree::Video %>
 <% end %>
+
+<table class="table sortable" data-hook="videos_table" data-sortable-link="<%= update_positions_admin_product_videos_url(@product) %>">
+    <thead>
+        <tr data-hook="videos_header">
+            <th>
+                <%= Spree.t(:position) %>
+            </th>
+            <th>
+                <%= Spree.t(:youtube_ref) %>
+            </th>
+            <th class="actions"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% (@product.videos).each do |video| %>
+            <tr id="<%= spree_dom_id video %>" data-hook="videos_row">
+                <td class="move-handle">
+                    <% if can? :edit, video %>
+                        <span class="icon icon-move handle"></span>
+                    <% end %>
+                </td>
+                <td><%= link_to(video.youtube_ref, "https://www.youtube.com/watch?v=#{video.youtube_ref}") %></td>
+                <td class="actions actions-2 text-right">
+                    <%= link_to_with_icon('edit', Spree.t(:edit), spree.edit_admin_product_video_url(@product, video), class: 'btn btn-primary btn-sm', no_text: true, data: { action: 'edit' }) %>
+                    <%= link_to_delete(video, { url: spree.admin_product_video_url(@product, video), no_text: true }) %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

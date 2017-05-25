@@ -1,22 +1,16 @@
-<h4><%= t("new_video") %></h4>
-<%= form_for(:video, :url => { :controller => 'videos', :action => 'create' }, :html => { :multipart => true }) do |form| %>
-  <table class="basic-table">
-    <%= render :partial => "form", :locals => { :f => form } %>
-  </table>
-  <p class="form-buttons">
-    <%= button t("update") %>
-    <%= t('or') %> <%= link_to t("cancel"), "#", :id => "cancel_link" %>
-  </p>
-<% end %>
+<% content_for :page_title do %>
+     <%= Spree.t(:new_video) %>
+ <% end %>
 
-
-<script type="text/javascript">    
-  jQuery('#cancel_link').click(function (event) { 
-    jQuery('#new_video_link').show();
-    jQuery('#video').html('');
-  });  
- 
-</script>
-
- 
- 
+ <%= form_for [:admin, @product, @video] do |f| %>
+     <div class="row">
+         <div class="col-md-12">
+             <%= render 'form', f: f %>
+         </div>
+     </div>
+     <div class="form-actions" data-hook="buttons">
+         <%= button Spree.t('actions.create'), 'ok', 'submit', {class: 'btn-success'} %>
+         <span class="or"><%= Spree.t(:or) %></span>
+         <%= button_link_to Spree.t('actions.cancel'), admin_product_videos_url(@product), :icon => 'remove' %>
+     </div>
+ <% end %> 
