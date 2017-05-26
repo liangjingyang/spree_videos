@@ -1,6 +1,7 @@
 module Spree
   class Video < ActiveRecord::Base
     belongs_to :watchable, :polymorphic => true, :touch => true
+    acts_as_list scope: [:watchable_id, :watchable_type]
 
     validates_presence_of :youtube_ref
     validates_uniqueness_of :youtube_ref, :scope => [:watchable_id, :watchable_type]
