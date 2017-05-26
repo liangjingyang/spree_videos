@@ -1,3 +1,3 @@
-<%= content_tag(:div, id: 'video-player') do %>
-  <%== video.youtube_data.embed_html %>
+<%= content_tag(:div, class: 'video-player') do %>
+  <%== video.embed_html %>
 <% end if video.present? %>

@@ -8,9 +8,13 @@ module Spree
     def youtube_data
       Yt::Video.new id: youtube_ref
     end
+
+    def embed_html
+      youtube_data.embed_html.gsub(/#{youtube_ref}/, "#{youtube_ref}?autoplay=0&showinfo=0&controls=1&loop=1&playlist=#{youtube_ref}")
+    end
   
     after_validation do
-      youtube_ref.match(/(v=|\/|)([\w-]+)(&.+)?$/) { |m| self.youtube_ref = m[2] }
+      youtube_ref.match(/(v=|\/)([\w-]+)(&.+)?$/) { |m| self.youtube_ref = m[2] }
     end
   end
 end
