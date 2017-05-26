@@ -1,8 +1,12 @@
 <% cache ['product-videos', product] do %>
-<% if product.videos.present? %>
-<div id="product-videos">
-	<%= render 'video_player', :video => product.videos.first %>
-	<%= render 'video_thumbnails', :videos => product.videos %>
-</div>
-<% end %>
+    <% if product.videos.present? %>
+        <div id="product-videos" data-hook="product_videos">
+            <div id="main-video" class="panel panel-default" data-hook>
+                <%= render 'video_player', :video => product.videos.first %>
+            </div>
+            <div id="video_thumbnails" data-hook>
+                <%= render 'video_thumbnails', :videos => product.videos %>
+            </div>
+        </div>
+    <% end %>
 <% end %>
